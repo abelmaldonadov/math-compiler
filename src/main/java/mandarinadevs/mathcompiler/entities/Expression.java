@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Expression {
-    private Integer id;
     private ExpressionType type;
     private Operator operator;
+    private Boolean isInverse;
     private Double coefficient;
     private String variable;
-    private List<Expression> childExpressions;
+    private List<Expression> expressions;
     private DecimalTreatment decimalTreatment;
     private Conditional conditional;
 }

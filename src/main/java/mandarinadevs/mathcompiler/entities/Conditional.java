@@ -5,15 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mandarinadevs.mathcompiler.enums.Operator;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Conditional {
     private Operator operator;
-    private List<Expression> conditionalTerm1;
-    private List<Expression> conditionalTerm2;
-    private List<Expression> success;
-    private List<Expression> failure;
+    private Expression conditionalTerm1;
+    private Expression conditionalTerm2;
+    private Expression success;
+    private Expression failure;
 }
