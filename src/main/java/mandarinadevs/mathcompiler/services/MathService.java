@@ -3,9 +3,8 @@ package mandarinadevs.mathcompiler.services;
 import mandarinadevs.mathcompiler.entities.Expression;
 import org.springframework.stereotype.Service;
 
-import static mandarinadevs.mathcompiler.entities.ExpressionType.NUMBER;
-import static mandarinadevs.mathcompiler.entities.ExpressionType.VARIABLE;
-import static mandarinadevs.mathcompiler.entities.Operator.SUBTRACTION;
+import static mandarinadevs.mathcompiler.enums.ExpressionType.VARIABLE;
+import static mandarinadevs.mathcompiler.enums.Operator.SUBTRACTION;
 
 @Service
 public class MathService {
@@ -20,7 +19,14 @@ public class MathService {
                     .reduce(0.0, (acc, cur) -> acc + evaluateExpression(cur), Double::sum)
                 : 1.0;
 
-        return operator * coefficient * variableValue;
+        switch (expression.getDecimalTreatment()) {
+            case ROUND:
+                return (double) Math.round(operator * coefficient * variableValue);
+            case TRUNCATE:
+                return (double) (int) (operator * coefficient * variableValue);
+            default:
+                return operator * coefficient * variableValue;
+        }
     }
 
     public Double resolve(Expression formula) {

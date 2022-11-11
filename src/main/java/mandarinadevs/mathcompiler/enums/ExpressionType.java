@@ -1,4 +1,4 @@
-package mandarinadevs.mathcompiler.entities;
+package mandarinadevs.mathcompiler.enums;
 
 public enum ExpressionType {
     NUMBER, VARIABLE
