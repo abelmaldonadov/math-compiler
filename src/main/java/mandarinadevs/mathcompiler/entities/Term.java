@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Expression {
+public class Term {
     private ExpressionType type;
     private Operator operator;
     private Double coefficient;

@@ -1,14 +1,17 @@
 package mandarinadevs.mathcompiler.services;
 
+import lombok.extern.slf4j.Slf4j;
 import mandarinadevs.mathcompiler.entities.Conditional;
 import mandarinadevs.mathcompiler.entities.Expression;
+import mandarinadevs.mathcompiler.entities.Variable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 import static mandarinadevs.mathcompiler.enums.ExpressionType.VARIABLE;
-import static mandarinadevs.mathcompiler.enums.Operator.SUBTRACTION;
+import static mandarinadevs.mathcompiler.enums.Operator.*;
 
+@Slf4j
 @Service
 public class MathService {
     public Expression evaluateConditional(Expression expression) {
@@ -40,15 +43,24 @@ public class MathService {
         }
     }
 
+    public Double evaluateVariable(Variable variable) {
+        if (variable.getOperator() == DIVISION) {
+            return Math.pow(evaluateExpression(variable.getValue()), -1.0);
+        } else {
+            return evaluateExpression(variable.getValue());
+        }
+    }
+
     public Double evaluateExpression(Expression expression) {
         expression = evaluateConditional(expression);
         Double operator = expression.getOperator() == SUBTRACTION ? -1.0 : 1.0;
         Double coefficient = expression.getCoefficient();
         Double variableValue = expression.getType() == VARIABLE
                 ? expression
-                    .getExpressions()
+                    .getVariables()
                     .stream()
-                    .reduce(0.0, (acc, cur) -> acc + evaluateExpression(cur), Double::sum)
+                    .map(this::evaluateVariable)
+                    .reduce(1.0, (acc, cur) -> acc * cur)
                 : 1.0;
 
         switch (expression.getDecimalTreatment()) {

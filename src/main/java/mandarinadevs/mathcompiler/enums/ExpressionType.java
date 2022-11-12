@@ -1,5 +1,5 @@
 package mandarinadevs.mathcompiler.enums;
 
 public enum ExpressionType {
-    CONSTANT, VARIABLE
+    CONSTANT, VARIABLE, CONDITIONAL
 }
