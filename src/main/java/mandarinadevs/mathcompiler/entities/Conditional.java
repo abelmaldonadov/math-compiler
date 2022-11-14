@@ -10,8 +10,8 @@ import mandarinadevs.mathcompiler.enums.Operator;
 @NoArgsConstructor
 public class Conditional {
     private Operator operator;
-    private Expression conditionalTerm1;
-    private Expression conditionalTerm2;
+    private Expression conditionalExpression1;
+    private Expression conditionalExpression2;
     private Expression success;
     private Expression failure;
 }
