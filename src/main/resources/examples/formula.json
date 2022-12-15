@@ -1,0 +1,21 @@
+{
+  "decimalTreatment":"TRUNCATE",
+  "power":2.0,
+  "conditional":null,
+  "terms":[
+    {
+      "operator":"ADDITION",
+      "power":2.0,
+      "elems":[
+        {
+          "type":"CONSTANT",
+          "power":1.0,
+          "name":null,
+          "operator":"MULTIPLICATION",
+          "coefficient":1.0,
+          "variable":null
+        }
+      ]
+    }
+  ]
+}

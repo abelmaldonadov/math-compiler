@@ -1,0 +1,9 @@
+valores de la propiedad operador para el term:
+
+ - ADDITION
+ - SUBTRACTION
+
+valores de la propiedad operador para el elem:
+
+ - MULTIPLICATION
+ - DIVISION
