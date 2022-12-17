@@ -4,37 +4,35 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mandarinadevs.mathcompiler.enums.DecimalTreatment;
+import mandarinadevs.mathcompiler.enums.Operator;
 
 import java.util.List;
 
 import static mandarinadevs.mathcompiler.enums.DecimalTreatment.DECIMAL;
+import static mandarinadevs.mathcompiler.enums.Operator.ADDITION;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Expression {
     private DecimalTreatment decimalTreatment = DECIMAL;
-    private Double power = 1.0;
-    private Conditional conditional = null;
-    private List<Term> terms;
+    private Operator operator = ADDITION;
+    private List<Elem> elems = List.of();
 
-    public Expression (Term... terms) {
-        this.terms = List.of(terms);
-    }
-    public Expression (Conditional conditional) {
-        this.conditional = conditional;
-    }
-    public Expression (DecimalTreatment decimalTreatment, Term... terms) {
+    public Expression (DecimalTreatment decimalTreatment, Operator operator, Elem... elems) {
         this.decimalTreatment = decimalTreatment;
-        this.terms = List.of(terms);
+        this.operator = operator;
+        this.elems = List.of(elems);
     }
-    public Expression (Double power, Term... terms) {
-        this.power = power;
-        this.terms = List.of(terms);
-    }
-    public Expression (DecimalTreatment decimalTreatment, Double power, Term... terms) {
+    public Expression (DecimalTreatment decimalTreatment, Elem... elems) {
         this.decimalTreatment = decimalTreatment;
-        this.power = power;
-        this.terms = List.of(terms);
+        this.elems = List.of(elems);
+    }
+    public Expression (Operator operator, Elem... elems) {
+        this.operator = operator;
+        this.elems = List.of(elems);
+    }
+    public Expression (Elem... elems) {
+        this.elems = List.of(elems);
     }
 }

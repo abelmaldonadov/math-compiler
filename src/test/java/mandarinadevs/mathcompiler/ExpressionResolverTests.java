@@ -1,10 +1,8 @@
 package mandarinadevs.mathcompiler;
 
 import lombok.extern.slf4j.Slf4j;
-import mandarinadevs.mathcompiler.entities.Conditional;
 import mandarinadevs.mathcompiler.entities.Elem;
 import mandarinadevs.mathcompiler.entities.Expression;
-import mandarinadevs.mathcompiler.entities.Term;
 import mandarinadevs.mathcompiler.services.ExpressionResolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,15 +20,14 @@ class ExpressionResolverTests {
 
     private static final Expression formula = new Expression(
             TRUNCATE,
-            new Term(
-                    new Elem(MULTIPLICATION, 10.6),
-                    new Elem(MULTIPLICATION, 5.0),
-                    new Elem(DIVISION, "A", new Expression(
-                            new Term(ADDITION, new Elem(2.0)),
-                            new Term(ADDITION, new Elem(2.0)),
-                            new Term(SUBTRACTION,  new Elem(2.0))
-                    ))
-            )
+            ADDITION,
+            new Elem(10.6),
+            new Elem(5.0),
+            new Elem("Something", new Expression(
+                    MULTIPLICATION,
+                    new Elem(2.0),
+                    new Elem(4.0)
+            ))
     );
 
     @Test
@@ -38,7 +35,7 @@ class ExpressionResolverTests {
         Double result = expressionResolver.resolve(formula);
         log.info(String.valueOf(result));
 
-        Assertions.assertEquals(26.0, result);
+        Assertions.assertEquals(23.0, result);
     }
 
     /**
@@ -49,13 +46,15 @@ class ExpressionResolverTests {
      * y en los posibles resultados del condicional...
      */
     private static final Expression formulaWithConditionals = new Expression(
-            new Conditional(
-                    EQUAL,
-                    new Expression(new Term(new Elem(2.5))),
-                    new Expression(new Term(new Elem(2.6))),
-                    new Expression(ROUND, new Term(new Elem(8.84445))),
-                    new Expression(ROUND, new Term(new Elem(-3.84445)))
-            )
+            GREATER,
+            new Elem(3.0),
+            new Elem(4.0),
+            new Elem("Something", new Expression(
+                    SUBTRACTION,
+                    new Elem(3.0),
+                    new Elem(1.0)
+            )),
+            new Elem(1.0)
     );
 
     @Test
@@ -63,26 +62,22 @@ class ExpressionResolverTests {
         Double result = expressionResolver.resolve(formulaWithConditionals);
         log.info(String.valueOf(result));
 
-        Assertions.assertEquals(-4, result);
+        Assertions.assertEquals(1.0, result);
     }
 
     /**
      * La potencia NO se aplica al signo, solo al valor...
-     * Entiendase la potencia como: -(abc)^2
+     * Entiendase la potencia como: (a)^2
      * La potencia podria ser expresada tambien como una expresion
-     * Sin embargo se paso por alto por revasar los limites de la utilidad del algoritmo...
      */
     private static final Expression formulaWithPower = new Expression(
-            0.5,
-            new Term(
-                    2.0,
-                    new Elem(MULTIPLICATION, 0.5, 9.0),
-                    new Elem(MULTIPLICATION, 4.0),
-                    new Elem(DIVISION, "A", new Expression(
-                            new Term(ADDITION, 2.0, new Elem(2.0)),
-                            new Term(SUBTRACTION, new Elem(2.0))
-                    ))
-            )
+            POWER,
+            new Elem("Something", new Expression(
+                    ROOT,
+                    new Elem(9.0),
+                    new Elem(2.0)
+            )),
+            new Elem(2.0)
     );
 
     @Test
@@ -90,6 +85,6 @@ class ExpressionResolverTests {
         Double result = expressionResolver.resolve(formulaWithPower);
         log.info(String.valueOf(result));
 
-        Assertions.assertEquals(6.0, result);
+        Assertions.assertEquals(9.0, result);
     }
 }

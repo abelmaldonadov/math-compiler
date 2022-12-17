@@ -1,33 +1,29 @@
 package mandarinadevs.mathcompiler.services;
 
 import lombok.extern.slf4j.Slf4j;
-import mandarinadevs.mathcompiler.entities.Conditional;
 import mandarinadevs.mathcompiler.entities.Elem;
 import mandarinadevs.mathcompiler.entities.Expression;
-import mandarinadevs.mathcompiler.entities.Term;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 import static mandarinadevs.mathcompiler.enums.ElemType.VARIABLE;
-import static mandarinadevs.mathcompiler.enums.Operator.*;
 import static mandarinadevs.mathcompiler.utils.MathUtil.truncate;
 
 @Slf4j
 @Service
 public class ExpressionResolver {
     private Expression evaluateConditional(Expression expression) {
-        Conditional conditional = expression.getConditional();
-        if (conditional == null) {
+        if (expression.getElems().size() != 4) {
             return expression;
         }
 
-        Double ce1 =  resolveExpression(conditional.getConditionalExpression1());
-        Double ce2 =  resolveExpression(conditional.getConditionalExpression2());
-        Expression success = conditional.getSuccess();
-        Expression failure = conditional.getFailure();
+        Double ce1 =  resolveElem(expression.getElems().get(0));
+        Double ce2 =  resolveElem(expression.getElems().get(1));
+        Expression success = new Expression(expression.getElems().get(2));
+        Expression failure = new Expression(expression.getElems().get(3));
 
-        switch (conditional.getOperator()) {
+        switch (expression.getOperator()) {
             case LESS:
                 return ce1 < ce2 ? success : failure;
             case GREATER:
@@ -41,41 +37,54 @@ public class ExpressionResolver {
             case NOT_EQUAL:
                 return !Objects.equals(ce1, ce2) ? success : failure;
             default:
-                return failure;
+                return expression;
         }
     }
 
     private Double resolveElem(Elem elem) {
-        double power = elem.getOperator() == DIVISION ? -1.0 : 1.0;
-        Double value = elem.getType() == VARIABLE
+        return elem.getType() == VARIABLE
                 ? resolveExpression(elem.getVariable())
                 : elem.getCoefficient();
-
-        value = Math.pow(value, elem.getPower());
-
-        return Math.pow(value, power);
-    }
-
-    private Double resolveTerm(Term term) {
-        double operator = term.getOperator() == SUBTRACTION ? -1.0 : 1.0;
-        double value = term.getElems()
-                .stream()
-                .map(this::resolveElem)
-                .reduce(1.0, (acc, cur) -> acc * cur);
-
-        value = Math.pow(value, term.getPower());
-
-        return operator * value;
     }
 
     private Double resolveExpression(Expression expression) {
-        expression = evaluateConditional(expression);
-        double result = expression.getTerms()
-                .stream()
-                .map(this::resolveTerm)
-                .reduce(0.0, Double::sum);
+        expression = this.evaluateConditional(expression);
+        double result;
 
-        result = Math.pow(result, expression.getPower());
+        switch (expression.getOperator()) {
+            case ADDITION:
+                 result = expression.getElems().stream()
+                        .map(this::resolveElem)
+                        .reduce(0.0, Double::sum);
+                break;
+            case SUBTRACTION:
+                Double s1 = this.resolveElem(expression.getElems().get(0));
+                Double s2 = this.resolveElem(expression.getElems().get(1));
+                result = s1 - s2;
+                break;
+            case MULTIPLICATION:
+                result = expression.getElems().stream()
+                        .map(this::resolveElem)
+                        .reduce(1.0, (acc, cur) -> acc * cur);
+                break;
+            case DIVISION:
+                Double d1 = this.resolveElem(expression.getElems().get(0));
+                Double d2 = this.resolveElem(expression.getElems().get(1));
+                result = d1 / d2;
+                break;
+            case POWER:
+                double p1 = this.resolveElem(expression.getElems().get(0));
+                double p2 = this.resolveElem(expression.getElems().get(1));
+                result = Math.pow(p1, p2);
+                break;
+            case ROOT:
+                Double r1 = this.resolveElem(expression.getElems().get(0));
+                Double r2 = this.resolveElem(expression.getElems().get(1));
+                result = Math.pow(r1, 1.0 / r2);
+                break;
+            default:
+                result = 0.0;
+        }
 
         switch (expression.getDecimalTreatment()) {
             case ROUND:
