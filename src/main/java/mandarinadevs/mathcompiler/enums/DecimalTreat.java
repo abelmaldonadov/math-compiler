@@ -1,5 +1,5 @@
 package mandarinadevs.mathcompiler.enums;
 
-public enum DecimalTreatment {
+public enum DecimalTreat {
     ROUND, TRUNCATE, DECIMAL
 }

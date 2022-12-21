@@ -18,9 +18,9 @@ public class ExpressionBuilderTests {
     @Autowired
     private ExpressionResolver expressionResolver;
 
-    private static final String elem1 = "{\"type\":\"CONSTANT\", \"coefficient\":3.0, \"variable\":null, \"name\":\"\"}";
-    private static final String elem2 = "{\"type\":\"CONSTANT\", \"coefficient\":2.5, \"variable\":null, \"name\":\"\"}";
-    private static final String formula = "{\"decimalTreatment\":\"TRUNCATE\", \"operator\":\"ADDITION\", \"elems\":[" + elem1 + ", " + elem2 + "]}";
+    private static final String elem1 = "{\"type\":\"CONSTANT\", \"coefficient\":3.0, \"value\":null, \"name\":\"\"}";
+    private static final String elem2 = "{\"type\":\"CONSTANT\", \"coefficient\":2.5, \"value\":null, \"name\":\"\"}";
+    private static final String formula = "{\"decimalTreat\":\"TRUNCATE\", \"operator\":\"ADDITION\", \"elems\":[" + elem1 + ", " + elem2 + "]}";
 
     @Test
     void build() throws JsonProcessingException {
@@ -28,6 +28,6 @@ public class ExpressionBuilderTests {
         Double result = expressionResolver.resolve(expression);
         log.info(String.valueOf(result));
 
-        Assertions.assertEquals(6.0, result);
+        Assertions.assertEquals(5.0, result);
     }
 }

@@ -14,15 +14,15 @@ import static mandarinadevs.mathcompiler.enums.ElemType.VARIABLE;
 public class Elem {
     private ElemType type = CONSTANT;
     private Double coefficient = 1.0;
-    private Expression variable = null;
     private String name = "";
+    private Expression value = null;
 
     public Elem (Double coefficient) {
         this.coefficient = coefficient;
     }
-    public Elem (String name, Expression variable) {
+    public Elem (String name, Expression value) {
         this.type = VARIABLE;
         this.name = name;
-        this.variable = variable;
+        this.value = value;
     }
 }

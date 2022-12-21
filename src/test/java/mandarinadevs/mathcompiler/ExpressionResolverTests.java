@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static mandarinadevs.mathcompiler.enums.DecimalTreatment.*;
+import static mandarinadevs.mathcompiler.enums.DecimalTreat.*;
 import static mandarinadevs.mathcompiler.enums.Operator.*;
 
 @Slf4j

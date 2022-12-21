@@ -43,7 +43,7 @@ public class ExpressionResolver {
 
     private Double resolveElem(Elem elem) {
         return elem.getType() == VARIABLE
-                ? resolveExpression(elem.getVariable())
+                ? resolveExpression(elem.getValue())
                 : elem.getCoefficient();
     }
 
@@ -86,7 +86,7 @@ public class ExpressionResolver {
                 result = 0.0;
         }
 
-        switch (expression.getDecimalTreatment()) {
+        switch (expression.getDecimalTreat()) {
             case ROUND:
                 return (double) Math.round(result);
             case TRUNCATE:
