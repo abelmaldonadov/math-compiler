@@ -23,7 +23,7 @@ class ExpressionResolverTests {
             ADDITION,
             new Elem(10.6),
             new Elem(5.0),
-            new Elem("Something", new Expression(
+            new Elem(new Expression(
                     MULTIPLICATION,
                     new Elem(2.0),
                     new Elem(4.0)
@@ -49,7 +49,7 @@ class ExpressionResolverTests {
             GREATER,
             new Elem(3.0),
             new Elem(4.0),
-            new Elem("Something", new Expression(
+            new Elem(new Expression(
                     SUBTRACTION,
                     new Elem(3.0),
                     new Elem(1.0)
@@ -72,7 +72,7 @@ class ExpressionResolverTests {
      */
     private static final Expression formulaWithPower = new Expression(
             POWER,
-            new Elem("Something", new Expression(
+            new Elem(new Expression(
                     ROOT,
                     new Elem(9.0),
                     new Elem(2.0)

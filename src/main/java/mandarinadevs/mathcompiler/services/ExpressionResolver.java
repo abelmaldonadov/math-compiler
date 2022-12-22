@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-import static mandarinadevs.mathcompiler.enums.ElemType.VARIABLE;
 import static mandarinadevs.mathcompiler.utils.MathUtil.truncate;
 
 @Slf4j
@@ -42,9 +41,17 @@ public class ExpressionResolver {
     }
 
     private Double resolveElem(Elem elem) {
-        return elem.getType() == VARIABLE
-                ? resolveExpression(elem.getValue())
-                : elem.getCoefficient();
+        switch (elem.getType()) {
+            case EXPRESSION:
+                return resolveExpression(elem.getValue());
+            case VARIABLE:
+                // Búsqueda de variable
+                return 0.0;
+            case CONSTANT:
+                return elem.getCoefficient();
+            default:
+                return 0.0;
+        }
     }
 
     private Double resolveExpression(Expression expression) {

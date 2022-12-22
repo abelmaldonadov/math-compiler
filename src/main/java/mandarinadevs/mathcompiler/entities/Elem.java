@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mandarinadevs.mathcompiler.enums.ElemType;
 
-import static mandarinadevs.mathcompiler.enums.ElemType.CONSTANT;
-import static mandarinadevs.mathcompiler.enums.ElemType.VARIABLE;
+import static mandarinadevs.mathcompiler.enums.ElemType.*;
 
 @Data
 @AllArgsConstructor
@@ -20,9 +19,12 @@ public class Elem {
     public Elem (Double coefficient) {
         this.coefficient = coefficient;
     }
-    public Elem (String name, Expression value) {
+    public Elem (String name) {
         this.type = VARIABLE;
         this.name = name;
+    }
+    public Elem (Expression value) {
+        this.type = EXPRESSION;
         this.value = value;
     }
 }
